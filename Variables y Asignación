@@ -1,0 +1,24 @@
+Variables (@): Son el espacio temporal para guardar datos. Siempre comienzan con @.
+
+DECLARE: Se usa para crear la variable y definir su tipo de dato (ej. INT, NVARCHAR).
+
+SELECT @Variable = Valor: Es la forma más común de asignar un valor que viene de una consulta.
+
+-- 1. DECLARACIÓN de variables
+DECLARE @EmployeeID INT = 273; -- Empleado de ejemplo
+DECLARE @Nombre NVARCHAR(50);
+DECLARE @Puesto NVARCHAR(50);
+
+-- 2. ASIGNACIÓN: Obtener los valores de las tablas Person y Employee
+SELECT 
+    @Nombre = P.FirstName,
+    @Puesto = E.JobTitle
+FROM 
+    Person.Person P
+INNER JOIN
+    HumanResources.Employee E ON P.BusinessEntityID = E.BusinessEntityID
+WHERE 
+    P.BusinessEntityID = @EmployeeID;
+
+-- 3. RESULTADO: Mostrar el valor de las variables
+PRINT 'El empleado ID ' + CAST(@EmployeeID AS VARCHAR) + ' es ' + @Nombre + ' y su puesto es: ' + @Puesto;
