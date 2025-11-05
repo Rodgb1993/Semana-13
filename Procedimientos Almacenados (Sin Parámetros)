@@ -1,0 +1,27 @@
+CREATE PROCEDURE: Permite guardar un conjunto de comandos SQL en la base de datos para ejecutarlos fácilmente con el comando EXEC.
+
+usp_ (Prefijo): Es una convención común para nombrar procedimientos almacenados (User Stored Procedure).
+
+-- 1. CREACIÓN del Procedimiento
+CREATE PROCEDURE Production.usp_ReporteBicicletas
+AS
+BEGIN
+    SET NOCOUNT ON; -- Recomendado para principiantes
+
+    -- Lógica: Consulta de productos en la subcategoría 1 (Bikes)
+    SELECT 
+        ProductID,
+        Name,
+        ListPrice
+    FROM 
+        Production.Product
+    WHERE 
+        ProductSubcategoryID = 1 -- ID para 'Mountain Bikes'
+    ORDER BY
+        ListPrice DESC;
+END
+GO -- Necesario para finalizar el bloque CREATE PROCEDURE
+
+-- 2. EJECUCIÓN (Para que el estudiante vea que funciona)
+PRINT '--- Ejecutando Reporte de Bicicletas ---'
+EXEC Production.usp_ReporteBicicletas;
