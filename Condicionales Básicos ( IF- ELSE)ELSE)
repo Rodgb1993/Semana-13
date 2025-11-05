@@ -1,0 +1,27 @@
+IF/ELSE: Es la estructura básica de control de flujo. Si la condición del IF es verdadera, se ejecuta ese bloque; si es falsa, se ejecuta el bloque ELSE.
+
+BEGIN/END: Delimitan los bloques de código que se ejecutan condicionalmente.
+
+-- 1. DECLARACIÓN y Asignación
+DECLARE @ProductoID INT = 870; -- Producto 'Road-650 Red, 48'
+DECLARE @CostoActual MONEY;
+DECLARE @UmbralCosto MONEY = 500.00; 
+
+SELECT 
+    @CostoActual = StandardCost
+FROM 
+    Production.Product
+WHERE 
+    ProductID = @ProductoID;
+
+-- 2. CONDICIONAL (IF/ELSE): ¿El costo supera el umbral?
+IF @CostoActual > @UmbralCosto
+BEGIN
+    -- Se ejecuta si el costo es ALTO
+    PRINT 'El producto ' + CAST(@ProductoID AS VARCHAR) + ' tiene un COSTO ALTO: $' + CAST(@CostoActual AS VARCHAR);
+END
+ELSE
+BEGIN
+    -- Se ejecuta si el costo es BAJO o igual al umbral
+    PRINT 'El producto ' + CAST(@ProductoID AS VARCHAR) + ' tiene un COSTO BAJO: $' + CAST(@CostoActual AS VARCHAR);
+END
