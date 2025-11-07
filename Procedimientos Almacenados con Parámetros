@@ -1,0 +1,36 @@
+Teoría: Procedimientos Dinámicos
+Parámetros (@): Permiten que el SP reciba datos (ej. un color o un ID) al ser ejecutado. 
+Se definen justo después del nombre del procedimiento.
+
+Reusabilidad: Puedes usar este SP para buscar 'Red', 'Black', 'Blue', etc., sin cambiar el código fuente.
+
+-- Primero, eliminamos el SP anterior si existe
+IF OBJECT_ID('Production.usp_ListarPorColor') IS NOT NULL
+    DROP PROCEDURE Production.usp_ListarPorColor;
+GO
+
+-- 1. CREACIÓN del Procedimiento con parámetro
+CREATE PROCEDURE Production.usp_ListarPorColor
+    -- Parámetro de entrada: Color del producto a buscar
+    @ColorBuscado NVARCHAR(15)
+AS
+BEGIN
+    SET NOCOUNT ON; 
+
+    -- Lógica: Usar el parámetro en la cláusula WHERE
+    SELECT 
+        ProductID,
+        Name,
+        ListPrice
+    FROM 
+        Production.Product
+    WHERE 
+        Color = @ColorBuscado
+    ORDER BY
+        Name;
+END
+GO
+
+-- 2. EJECUCIÓN (Probando con dos colores diferentes)
+PRINT '--- Ejecutando la búsqueda para el color Black ---'
+EXEC Production.usp_ListarPorColor @ColorBuscado = 'Black';
