@@ -1,0 +1,35 @@
+Usamos IF @Parametro IS NULL para verificar si el usuario olvidó proporcionar un valor al parámetro, lo cual es una forma básica de validación de datos.
+
+-- Modificar el SP del día anterior (o crearlo de nuevo si no existe)
+IF OBJECT_ID('Production.usp_ListarPorColor') IS NOT NULL
+    DROP PROCEDURE Production.usp_ListarPorColor;
+GO
+
+CREATE PROCEDURE Production.usp_ListarPorColor
+    @ColorBuscado NVARCHAR(15)
+AS
+BEGIN
+    SET NOCOUNT ON; 
+
+    -- 1. CONDICIONAL: Verificar si el parámetro fue enviado
+    IF @ColorBuscado IS NULL OR @ColorBuscado = ''
+    BEGIN
+        PRINT 'ERROR: Debe especificar un color para la búsqueda.';
+        RETURN; -- Detiene la ejecución del procedimiento
+    END
+
+    -- 2. Lógica de Consulta (Solo se ejecuta si el IF no se cumplió)
+    SELECT 
+        ProductID,
+        Name,
+        ListPrice
+    FROM 
+        Production.Product
+    WHERE 
+        Color = @ColorBuscado;
+END
+GO
+
+-- 3. EJECUCIÓN (Probando el error)
+PRINT '--- Ejecutando la búsqueda SIN color ---'
+EXEC Production.usp_ListarPorColor @ColorBuscado = NULL; -- Esto activará el mensaje de ERROR
