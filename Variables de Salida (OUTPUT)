@@ -1,0 +1,29 @@
+OUTPUT: Palabra clave que permite que una variable definida en el SP regrese su valor final al código externo.
+
+Captura: El código que llama al SP también debe usar OUTPUT para capturar el valor.
+
+
+-- 1. CREACIÓN del Procedimiento con variable de salida
+CREATE PROCEDURE Sales.usp_ContarTotalOrdenes
+    @TotalOrdenes INT OUTPUT -- Marcado como variable de SALIDA
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- Calcular el conteo y asignarlo a la variable de salida
+    SELECT 
+        @TotalOrdenes = COUNT(SalesOrderID)
+    FROM 
+        Sales.SalesOrderHeader;
+END
+GO
+
+-- 2. EJECUCIÓN Y USO DE LA VARIABLE DE SALIDA
+-- a) Declara la variable para capturar el resultado
+DECLARE @ConteoFinal INT;
+
+-- b) Ejecuta el SP, capturando el valor en @ConteoFinal
+EXEC Sales.usp_ContarTotalOrdenes @TotalOrdenes = @ConteoFinal OUTPUT;
+
+-- c) Muestra el resultado capturado
+PRINT 'El número total de órdenes de venta en la base de datos es: ' + CAST(@ConteoFinal AS VARCHAR);
